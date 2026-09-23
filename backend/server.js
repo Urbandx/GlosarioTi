@@ -49,3 +49,6 @@ app.listen(PORT, () => {
   console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
   console.log(`📚 Glosario TI API activa`);
 });
+
+// Agregar después de las otras rutas
+app.use('/api/auth', require('./routes/auth'));
