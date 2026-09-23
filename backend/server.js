@@ -8,6 +8,7 @@ const app = express();
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use('/api/favoritos', require('./routes/favoritos'));
 
 // Conexión a MongoDB
 mongoose.connect(process.env.MONGO_URI, {
