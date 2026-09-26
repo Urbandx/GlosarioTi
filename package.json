@@ -1,0 +1,11 @@
+{
+  "name": "glosario-ti",
+  "version": "1.0.0",
+  "description": "Glosario TI - App móvil",
+  "scripts": {
+    "build": "cd frontend && npm install && npm run build",
+    "cap:sync": "cd frontend && npx cap sync android",
+    "cap:build": "cd frontend && npx cap build android"
+  },
+  "dependencies": {}
+}

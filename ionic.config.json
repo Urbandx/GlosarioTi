@@ -1,0 +1,8 @@
+{
+  "name": "Glosario TI",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "custom",
+  "root": "frontend"
+}
