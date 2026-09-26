@@ -3,9 +3,10 @@ import axios from 'axios';
 
 interface LoginProps {
   onLogin: (usuario: any, token: string) => void;
+  onClose: () => void;
 }
 
-const Login: React.FC<LoginProps> = ({ onLogin }) => {
+const Login: React.FC<LoginProps> = ({ onLogin, onClose }) => {
   const [esRegistro, setEsRegistro] = useState(false);
   const [formData, setFormData] = useState({
     nombre: '',
@@ -28,13 +29,14 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
       );
 
       if (esRegistro) {
-        alert('Registro exitoso. Ahora puedes iniciar sesión.');
+        alert('✅ Registro exitoso. Ahora puedes iniciar sesión.');
         setEsRegistro(false);
         setFormData({ ...formData, nombre: '' });
       } else {
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('usuario', JSON.stringify(response.data.usuario));
         onLogin(response.data.usuario, response.data.token);
+        onClose(); // ← Cerrar el modal al loguearse
       }
     } catch (err: any) {
       setError(err.response?.data?.message || 'Error de conexión');
@@ -44,9 +46,13 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
   };
 
   return (
-    <div className="login-container">
-      <div className="login-form">
-        <h2>{esRegistro ? 'Registro' : 'Iniciar Sesión'}</h2>
+    <div className="modal active" onClick={onClose}>
+      <div className="modal-contenido login-modal" onClick={(e) => e.stopPropagation()}>
+        <button className="cerrar" onClick={onClose} aria-label="Cerrar">
+          &times;
+        </button>
+        
+        <h2>{esRegistro ? '📝 Registro' : '🔐 Iniciar Sesión'}</h2>
         
         {error && <div className="error-message">{error}</div>}
 
@@ -60,6 +66,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
                 value={formData.nombre}
                 onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
                 required
+                placeholder="Tu nombre"
               />
             </div>
           )}
@@ -72,6 +79,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
               required
+              placeholder="tu@email.com"
             />
           </div>
 
@@ -84,11 +92,12 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
               onChange={(e) => setFormData({ ...formData, password: e.target.value })}
               required
               minLength={6}
+              placeholder="Mínimo 6 caracteres"
             />
           </div>
 
-          <button type="submit" disabled={cargando}>
-            {cargando ? 'Procesando...' : (esRegistro ? 'Registrarse' : 'Iniciar Sesión')}
+          <button type="submit" disabled={cargando} className="submit-btn">
+            {cargando ? '⏳ Procesando...' : (esRegistro ? 'Registrarse' : 'Iniciar Sesión')}
           </button>
         </form>
 

@@ -26,7 +26,6 @@ const usuarioSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Hash de contraseña antes de guardar
 usuarioSchema.pre('save', async function(next) {
   if (!this.isModified('password')) return next();
   try {
@@ -38,7 +37,6 @@ usuarioSchema.pre('save', async function(next) {
   }
 });
 
-// Método para comparar contraseñas
 usuarioSchema.methods.compararPassword = async function(password) {
   return await bcrypt.compare(password, this.password);
 };
