@@ -7,5 +7,9 @@
     "cap:sync": "cd frontend && npx cap sync android",
     "cap:build": "cd frontend && npx cap build android"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@capacitor/android": "^8.5.2",
+    "@capacitor/cli": "^8.5.2",
+    "@capacitor/core": "^8.5.2"
+  }
 }
