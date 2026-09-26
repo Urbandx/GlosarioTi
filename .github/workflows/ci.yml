@@ -1,0 +1,103 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+    branches:
+      - main
+      - master
+
+jobs:
+  # JOB 1: Backend (Node.js + MongoDB)
+  backend:
+    name: Backend - Build & Test
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Descargar código
+        uses: actions/checkout@v4
+
+      - name: 🟢 Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: backend/package-lock.json
+
+      - name: 📦 Instalar dependencias del backend
+        working-directory: ./backend
+        run: npm install
+
+      - name: 🔍 Verificar sintaxis del servidor
+        working-directory: ./backend
+        run: node -c server.js
+
+      - name: 🧪 Ejecutar pruebas (si existen)
+        working-directory: ./backend
+        run: npm test --if-present
+
+      - name: 📤 Subir artefacto del backend
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-build
+          path: |
+            backend/server.js
+            backend/models/
+            backend/routes/
+            backend/middleware/
+            backend/package.json
+          retention-days: 7
+
+  # JOB 2: Frontend (React + TypeScript)
+  frontend:
+    name: Frontend - Build & Test
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Descargar código
+        uses: actions/checkout@v4
+
+      - name: 🟢 Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: 📦 Instalar dependencias del frontend
+        working-directory: ./frontend
+        run: npm install
+
+      - name: 🔍 Verificar TypeScript
+        working-directory: ./frontend
+        run: npx tsc --noEmit
+
+      - name: 🏗️ Compilar el frontend
+        working-directory: ./frontend
+        run: npm run build
+
+      - name: 🧪 Ejecutar pruebas (si existen)
+        working-directory: ./frontend
+        run: npm test --if-present -- --watchAll=false
+
+      - name: 📤 Subir artefacto del frontend (build de producción)
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-build
+          path: frontend/build/
+          retention-days: 7
+
+  # JOB 3: Verificación final
+  status-check:
+    name: ✅ Verificación Final
+    runs-on: ubuntu-latest
+    needs: [backend, frontend]
+    
+    steps:
+      - name: ✅ Pipeline exitoso
+        run: |
+          echo "🎉 Backend y Frontend compilados correctamente"
+          echo "✅ Pipeline de CI completado exitosamente"

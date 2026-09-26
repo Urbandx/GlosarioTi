@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 interface Termino {
   id: number;
@@ -17,20 +17,8 @@ interface TerminoCardProps {
 }
 
 const TerminoCard: React.FC<TerminoCardProps> = ({ termino, onVerMas, onEliminar }) => {
-  const [esFavorito, setEsFavorito] = useState(false);
-
-  const toggleFavorito = () => {
-    setEsFavorito(!esFavorito);
-    const favs = JSON.parse(localStorage.getItem('favs') || '[]');
-    if (!esFavorito) {
-      localStorage.setItem('favs', JSON.stringify([...favs, termino.id]));
-    } else {
-      localStorage.setItem('favs', JSON.stringify(favs.filter((id: number) => id !== termino.id)));
-    }
-  };
-
   return (
-    <article className="card" role="article">
+    <article className="card">
       <img src={termino.imagen} alt={termino.concepto} loading="lazy" />
       <h3>{termino.concepto}</h3>
       <p>{termino.definicionCorta}</p>

@@ -109,7 +109,7 @@ function App() {
       <Header />
       
       <main id="main-content">
-        <section id="glosario" role="region" aria-labelledby="glosario-titulo">
+        <section id="glosario" aria-labelledby="glosario-titulo">
           <h2 id="glosario-titulo">Glosario de Términos TI</h2>
           
           <Buscador 
