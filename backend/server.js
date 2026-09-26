@@ -6,7 +6,15 @@ require('dotenv').config();
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: [
+    'http://localhost:3000',
+    'https://glosario-ti-frontend.onrender.com',
+    'https://glosarioti.onrender.com',
+    /\.onrender\.com$/
+  ],
+  credentials: true
+}));
 app.use(express.json());
 
 // Conexión a MongoDB
@@ -19,6 +27,8 @@ mongoose.connect(process.env.MONGO_URI, {
 
 // Rutas
 app.use('/api/terminos', require('./routes/terminos'));
+app.use('/api/auth', require('./routes/auth'));
+app.use('/api/favoritos', require('./routes/favoritos'));
 
 // Ruta de prueba
 app.get('/', (req, res) => {
@@ -28,7 +38,10 @@ app.get('/', (req, res) => {
     endpoints: {
       obtenerTerminos: 'GET /api/terminos',
       crearTermino: 'POST /api/terminos',
-      eliminarTermino: 'DELETE /api/terminos/:id'
+      eliminarTermino: 'DELETE /api/terminos/:id',
+      registro: 'POST /api/auth/registro',
+      login: 'POST /api/auth/login',
+      favoritos: 'GET/POST/DELETE /api/favoritos'
     }
   });
 });
@@ -46,7 +59,7 @@ app.use('*', (req, res) => {
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
+  console.log(`🚀 Servidor corriendo en puerto ${PORT}`);
   console.log(`📚 Glosario TI API activa`);
 });
 
