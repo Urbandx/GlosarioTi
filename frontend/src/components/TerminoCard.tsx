@@ -17,8 +17,6 @@ interface TerminoCardProps {
 }
 
 const TerminoCard: React.FC<TerminoCardProps> = ({ termino, onVerMas, onEliminar }) => {
-  const [esFavorito, setEsFavorito] = useState(false);
-
   return (
     <article className="card">
       <img src={termino.imagen} alt={termino.concepto} loading="lazy" />
