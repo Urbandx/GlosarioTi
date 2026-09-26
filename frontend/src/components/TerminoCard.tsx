@@ -14,6 +14,9 @@ interface TerminoCardProps {
   termino: Termino;
   onVerMas: (termino: Termino) => void;
   onEliminar: (id: number) => void;
+  favoritos: number[];
+  onToggleFavorito: (id: number) => void;
+  estaLogueado: boolean;
 }
 
 const TerminoCard: React.FC<TerminoCardProps> = ({ termino, onVerMas, onEliminar }) => {
@@ -26,11 +29,19 @@ const TerminoCard: React.FC<TerminoCardProps> = ({ termino, onVerMas, onEliminar
       <button className="ver-mas-btn" onClick={() => onVerMas(termino)}>
         Ver más
       </button>
+      
+      <button 
+        className={`fav-btn ${esFavorito ? 'favorito' : ''}`}
+        onClick={handleFavorito}
+        aria-label={`Marcar ${termino.concepto} como favorito`}
+      >
+        {esFavorito ? '★' : '☆'}
+      </button>
+
       <button 
         className="eliminar-btn"
         onClick={() => onEliminar(termino.id)}
         title="Eliminar término"
-        aria-label={`Eliminar ${termino.concepto}`}
       >
         🗑️
       </button>
