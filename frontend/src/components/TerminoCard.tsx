@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React from 'react';
 
 interface Termino {
   id: number;
@@ -20,26 +19,9 @@ interface TerminoCardProps {
   estaLogueado: boolean;
 }
 
-const TerminoCard: React.FC<TerminoCardProps> = ({ 
-  termino, 
-  onVerMas, 
-  onEliminar,
-  favoritos,
-  onToggleFavorito,
-  estaLogueado
-}) => {
-  const esFavorito = favoritos.includes(termino.id);
-
-  const handleFavorito = () => {
-    if (!estaLogueado) {
-      alert('Debes iniciar sesión para guardar favoritos');
-      return;
-    }
-    onToggleFavorito(termino.id);
-  };
-
+const TerminoCard: React.FC<TerminoCardProps> = ({ termino, onVerMas, onEliminar }) => {
   return (
-    <article className="card" role="article">
+    <article className="card">
       <img src={termino.imagen} alt={termino.concepto} loading="lazy" />
       <h3>{termino.concepto}</h3>
       <p>{termino.definicionCorta}</p>
